@@ -7,8 +7,8 @@
 import numpy as np
 
 # Represent the vectors as arrays. 
-theta = np.array([1,2,3]) 
-x = np.array([2,3,4])
+x =  np.array([1,2,3]) 
+theta = np.array([2,3,4])
 
 # Print the NumPy array representation of 'x' and 'theta' and their shapes. 
 print('theta:\n', theta)
@@ -72,10 +72,10 @@ plus_pos = [1, 1]
 
 # The following lines produce the plots. Try run the code.  
 # See the documentation at https://matplotlib.org/contents.html
-# plt.plot([left_point[0], right_point[0]], [left_point[1], right_point[1]], 'k--', linewidth=4, label=r'$\theta^{T} x = 0$')
-# plt.plot(plus_pos[0], plus_pos[1],'r', marker='+', markersize = 16, linewidth=4)
-# plt.legend()
-# plt.show()
+plt.plot([left_point[0], right_point[0]], [left_point[1], right_point[1]], 'k--', linewidth=4, label=r'$\theta^{T} x = 0$')
+plt.plot(plus_pos[0], plus_pos[1],'r', marker='+', markersize = 16, linewidth=4)
+plt.legend()
+plt.show()
 
 # ======================================== QUESTION 4 ========================================
 # In python you can extract the i'th column by A[:, i-1] (notice that the columns are 0 indexed)
@@ -174,3 +174,4 @@ print('Expected Children is: ', exp_children)
 
 
 # ======================================== QUESTION 10 ========================================
+>
