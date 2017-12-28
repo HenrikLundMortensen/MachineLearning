@@ -1,0 +1,48 @@
+\documentclass[oneside]{memoir}
+\usepackage[]{amsmath}
+\usepackage[]{bm}
+
+\counterwithout{section}{chapter}
+
+\title{Machine learning exam 2017}
+\author{Henrik Lund Mortensen}
+
+\begin{document}
+\maketitle
+
+\section{Linear Models}
+\section{Learning Theory}
+
+
+\begin{itemize}
+\item Supervised learning
+\item In-sample error vs out-of-sample error
+\end{itemize}
+
+\subsection{Learning feasibility}
+In general, we have an unknown function $f(x)$ and only a finte set of samples $\mathcal{D} = \{ x_i,f(x_i)\}$. Our job is to use $\mathcal{D}$ to estimate $f$ outisde of $\mathcal{D}$. Consider a set of hypotheses, $\mathcal{H}$. The goal is to choose the hypothesis, $g \in \mathcal{H}$ that approximates $f(x)$ best. There are two thing we must consider:
+
+\begin{enumerate}
+\item Can we find a $g$ such that the training samples are well explained, i.e. low $E_\text{in}(g)$?
+\item Can we make sure that the $E_\text{out}(g)$ is close to $E_\text{in}(g)$?
+\end{enumerate}
+The answer to the first question depends on the complexity of $f$ and the $\mathcal{H}$. It is clear that we can always find a set $\mathcal{H}$ which contains a hypothesis that matches the training data perfectly, i.e. $E_{\text{in}} = 0$. However, we get in trouble in the part 2 above. We cannot guarantee that $E_\text{out}(g)$ is close to $E_\text{in}(g)$, but we can estimate the probability that is it. This is given by the Hoeffding bound
+\begin{equation}
+  \label{hoeffding}
+\mathcal{P}\left[ |E_\text{out}(g) - E_\text{in}(g)| > \epsilon\right] \leq 2M e^{-2\epsilon^2N},
+\end{equation}
+where $N$ is the number of samples in $\mathcal{D}$ and $M$ is the size of $\mathcal{H}$ (number of hypotheses). There is a trade-off between choosing $\mathcal{H}$ complex enough to describe $f$ well, while low enough to have a reasonable bound in Eq. (\ref{hoeffding}). The Hoeffding bound only applies to finte $\mathcal{H}$, as it becomes meaningless when $M\rightarrow \infty$.
+
+
+
+
+\section{Support Vector Machines}
+\section{Neural Nets}
+\section{Decision Trees and Ensemble Methods}
+\section{Hidden Markov Models - Decoding}
+\section{Hidden Markov Models - Training}
+\section{Unsupervised Learning - Clustering}
+\section{Unsupervised Learning - Outlier Detection and Dimensionality Reduction}
+
+
+\end{document}

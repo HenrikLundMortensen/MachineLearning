@@ -27,6 +27,7 @@ def plot_hyperplane_example():
     y = np.array((0,0))
 
     ### YOUR CODE 2 lines
+    
     ### END CODE 
     
     plt.axis([0, 1, 0, 1])
@@ -99,6 +100,7 @@ def pla_train(X, y, w=None):
     # Run the perceptron iteration
     
     ### YOUR CODE 5-10 lines
+    
     ### END CODE   
         
     return w
