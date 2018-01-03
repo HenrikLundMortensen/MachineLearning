@@ -113,9 +113,43 @@ These update rules follows from differentiation of the log likelihood function, 
 
 
 \subsection{Performance measures}
-
+\dots
 
 \section{Unsupervised Learning - Outlier Detection and Dimensionality Reduction}
+
+\subsection{PCA}
+In Principal Component Analisys (PCA), we seek to represent data in a high dimentional space in a low dimensional containing the most important features. Data may be correlated in a way that makes the high dimensional representation essentially redundant. Consider images of faces represented by $100 \text{ pixels}\times 100 \text{ pixels} = 10000$ dimensional space. With PCA, this can be reduced to $\sim20$ dimensions representing the most essential face features. 
+
+The first step in PCA is to normalize the data, such that it has zero mean and unit variance. This is done by
+\begin{align}
+  x^{(i)} &\rightarrow x^{(i)} - \mu\;,\;\;\; \mu = \frac{1}{m}\sum_{i=1}^m x^{(i)} 
+\end{align}
+and then
+\begin{align}
+  x^{(i)}_j &\rightarrow \frac{x^{(i)}_j}{\sigma_j}\;,\;\;\; \sigma_j = \frac{1}{m}\sum_{i=1}^m  \left(x^{(i)}_j\right)^2 .
+\end{align}
+The goal is now to find a vector $\vec{u}$ such that when the data is projected onto $\vec{u}$ it has the highest variance. That is, we seek to maximize
+\begin{equation}
+  \label{variance u projection}
+  \frac{1}{m} \sum_{i=1}^m \left( \vec{x}^{(i)^T}\vec{u} \right)^2 = \vec{u}^T \left(\frac{1}{m}\sum_{i=1}^m \vec{x}^{(i)}\vec{x}^{(i)^T} \right) \vec{u}.
+\end{equation}
+Maximizing this quantity with the constraint that $\vec{u}$ is a unit vector reveals that $\vec{u}$ must be an eigenvector of the estimated covariance matrix
+\begin{equation}
+  \label{estimated covariance matrix}
+\Sigma = \frac{1}{m}\sum_{i=1}^m \vec{x}^{(i)}\vec{x}^{(i)^T}.
+\end{equation}
+To reduce the high dimentional space to a $k$-dimensional space we simply project onto the first $k$ eigenvectors of $\Sigma$,
+\begin{equation}
+  \label{PCA y}
+y^{(i)} = 
+\left[  \begin{matrix}
+    \vec{u}_1^T \vec{x^{(i)}} \\
+    \vec{u}_2^T \vec{x^{(i)}} \\
+    \vdots \\
+    \vec{u}_k^T \vec{x^{(i)}} 
+  \end{matrix}\right].
+\end{equation}
+
 
 
 \end{document}
