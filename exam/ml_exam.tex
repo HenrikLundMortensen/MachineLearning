@@ -72,10 +72,17 @@ Lloyd's algorithm is fast, but can only give convex clusters (draw non-convex ex
 
 \subsection{$K$-medoids}
 
-Similar to $K$-means, but here a representative datapoint is chosen as cluster center. Also, the distance is the $L_1$-norm (Manhattan distance) instead of the Euclidian distance in $K$-means (why?).
+Similar to $K$-means, but here a representative datapoint is chosen as cluster center. The algorithm is initialized by chosing $k$ random points as cluster centers. The cost is defined as
+\begin{equation}
+  \label{kmedoid cost}
+  \text{TD} = \sum_i \sum_{p\in \mathcal{C}_i} \text{dist} (p,x_i).
+\end{equation}
+Then, for each cluster center, $x_i$, and data point that is not a cluster center, $q$, we swap such that $q$ becomes a cluster center and calculates TD again. The swap with the lowest cost is now chosen. This repeats untill there is no change in TD.
+
+$k$-medoids is sometimes applied instead of $k$-means, e.g. if a mean is ill-defined in the specific problem. It is also not as sensitive to outliers. The implementation cost is $\mathcal{O}(N^2k^2)$ (I think), which makes it much more expensive than $k$-means.
 
 \subsection{Expectation Maximization Clustering}
-Unlike $K$-means and $K$-medoids, EM clustering is a \emph{soft clustering} method. A probability for belonging to a certain cluster is assigned to each data point, instead of a hard label.
+Unlike $k$-means and $k$-medoids, EM clustering is a \emph{soft clustering} method. A probability for belonging to a certain cluster is assigned to each data point, instead of a hard label.
 
 In EM clustering we find $n$ clusters represented by multivariate normal distributions.
 \begin{equation}
@@ -92,7 +99,12 @@ where the mixture parameters satisfies $\sum_i P(\mathcal{C}_i) = 1$. The model 
   \label{theta max}
   \theta^* = \arg \max_{\theta} \; P(\vec{D}|\theta) =  \arg \max_{\theta} \; \ln P(\vec{D}|\theta).
 \end{equation}
-Finding $\theta^*$ is generally hard. Again, we can use an iterative algorithm to approximate $\theta^*$ in a two-step process. The first step (\emph{estimation step}) is to calculate $w_{ij} = P(\mathcal{C}_i|\vec{x}_j)$, which is \dots
+Finding $\theta^*$ is generally hard. Again, we can use an iterative algorithm to approximate $\theta^*$ in a two-step process. The first step (\emph{estimation step}) is to calculate $w_{ij} = P(\mathcal{C}_i|\vec{x}_j)$. This is done using Bayes rule
+\begin{equation}
+  \label{bayes EM}
+  P(\mathcal{C}_i|x_j) = \frac{P(x_j) P(x_j|\mathcal{C}_i)}{P(\mathcal{C}_i)}.
+\end{equation}
+Here, $P(\mathcal{C}_i)$ is initialized as $\frac{1}{n}$. $P(x_j|\mathcal{C}_i)$ is easily calculated by Eq. (\ref{EM clustering f}) and $P(x_j) = \sum_i P(x_j|\mathcal{C}_i) P(\mathcal{C}_i)$. 
 
 The second step (\emph{maximization step}) is to reestimate the model parameters using the weights, $w_{ij}$. The means are estimated as
 \begin{equation}
@@ -110,6 +122,31 @@ where $\vec{z}_{ji} = \vec{x}_j - \vec{\mu}_i$. Finally, the mixture parameters 
   P(\mathcal{C}_i) = \frac{\vec{w}_i^T \vec{1}}{n}.
 \end{equation}
 These update rules follows from differentiation of the log likelihood function, $\ln P(\vec{D}|\theta)$, with respect to the parameters, and setting it to zero. 
+
+\subsection{DBSCAN}
+DBSCAN is a density based clustering method. Instead of considering distances between all data points, only the neighbourhoods of the data points are considered. The idea is to cluster data points based on the local density.
+
+Consider a data point $q$ in the dataset $\mathcal{D}$. Any point, $p$, which is closer to $q$ than some threshold, $\epsilon$, is said to be in the neighbourhood of $q$,
+\begin{equation}
+  \label{neighbourhood of q}
+\mathcal{N}_\epsilon(q) = \left\{\;p\;\;|\; \text{dist}(p,q)\leq \epsilon\; \right\}.
+\end{equation}
+Some definitions;
+\begin{itemize}
+\item $q$ is a \emph{core point} of the cluster if $|\mathcal{N}_\epsilon(q)| \geq \text{\emph{MinPts}}$. 
+\item $p$ is \emph{directly density reachable} from $q$ if $p \in \mathcal{N}_\epsilon(q)$. 
+\item $p$ is \emph{density reachable} from $s$ if there exists a chain of core points such that the chain elements are directly reachable from its chain neighbour.
+\item Two points, $p$ and $s$, are \emph{density connected} if they are both density connected to some core point, $q$.
+\end{itemize}
+The algorithm first computes $N_\epsilon(p)$ for all points $p\in \mathcal{D}$. Based on this, all core points are identified. Next, the density connected clusters are located by going through $N_\epsilon(q)$ for all core points.
+
+The complexity depends on how efficiently the neighbourhood can be determined. Worst case is $\mathcal{O}(N^2)$, but if the dimension is not to high it can be done in $\mathcal{O}(N\log N)$.
+
+An advantage is that no number of clusters is to be specified before hand. Also, non-convex cluster shapes can be found. A disadvantage is that $\epsilon$ is har to choose, especially if some clusters are on different scales.
+
+\subsection{DENCLUE}
+The DENCLUE algorithm is also a density based clustering algorithm. 
+
 
 
 \subsection{Performance measures}
